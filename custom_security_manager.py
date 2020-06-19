@@ -10,6 +10,8 @@ from flask_appbuilder._compat import as_unicode
 from superset import app
 import requests
 import json
+from urllib.parse import urlparse
+from posixpath import basename, dirname
 
 
 
@@ -61,6 +63,8 @@ class CustomAuthDBView(AuthDBView):
     @expose('/login/', methods=['GET', 'POST'])
     def login(self):
 
+        
+
         """sso starts"""
 
         sso_app_host = self.appbuilder.app.config["SSO_HOST"]
@@ -85,12 +89,24 @@ class CustomAuthDBView(AuthDBView):
         #     response = make_response(redirect("/superset/welcome"))
         #     #s = response.headers
             #username = user.username
+
             if user is not None:
                 
         #         if response is not None:  
                                 
                 login_user(user, remember=False)
         #             #return response 
+                arg = request.args
+                dashboard_id = request.args.get('next')
+                #s = dashboard_id.split('/')[-2]
+               
+
+                if dashboard_id is not None: 
+                    parse_object = urlparse(dashboard_id)
+                    s=parse_object.path
+                    s=s.split('/')[-2] 
+                    return redirect("/superset/dashboard/{}".format(s))
+                    #return redirect("dashboard_id")
 
                 return redirect("/superset/welcome")
 
@@ -128,6 +144,8 @@ class CustomAuthDBView(AuthDBView):
                 response.set_cookie('sso', value=cook , domain = sso_domain )
                 return response 
 
+            
+
             return redirect(self.appbuilder.get_url_for_index)
 
         return self.render_template(
@@ -138,7 +156,7 @@ class CustomAuthDBView(AuthDBView):
     def logout(self):
 
         sso_app_host = self.appbuilder.app.config["SSO_HOST"]
-        sso_app_port = self.appbuilder.app.config["SSO_PORT"] 
+        sso_app_port = self.appbuilder.app.config["SSO_PORT"]
         sso_app_name = self.appbuilder.app.config["SSO_NAME"]
         sso_domain = self.appbuilder.app.config["SSO_DOMAIN_NAME"]
 
@@ -149,14 +167,17 @@ class CustomAuthDBView(AuthDBView):
             client = SSOSessionClient(sso_app_host, sso_app_port, sso_app_name )
             client.delete_sso_session(name)
             # sso_id = client.get_sso_session(name)
-            res = make_response(redirect(self.appbuilder.get_url_for_index))
-    #     
+            res = app.make_response(redirect(self.appbuilder.get_url_for_index))
+    #
 
-
-            res.set_cookie('sso', expires=0,domain=sso_domain)
-            #return res
             
+            res.set_cookie('sso', expires=0,path='/',domain=sso_domain)
+            #res.set_cookie('sso', expires=0,path='/')
+            logout_user()
+            return res
         logout_user()
+
+        
         return redirect(self.appbuilder.get_url_for_index)
 
 class CustomSecurityManager(SupersetSecurityManager):

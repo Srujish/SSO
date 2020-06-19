@@ -34,8 +34,10 @@ from superset.extensions import (
     talisman,
 )
 from superset.security import SupersetSecurityManager
+from flask.sessions import SecureCookieSessionInterface
 from superset.utils.log import DBEventLogger, get_event_logger_from_cfg_value
 from superset.custom_security_manager import CustomSecurityManager,SSOSessionClient
+#from superset.CustomSessionInterface import CustomSessionInterface
 
 #  All of the fields located here should be considered legacy. The correct way
 #  to declare "global" dependencies is to define it in extensions.py,
