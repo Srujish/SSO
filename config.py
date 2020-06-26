@@ -127,6 +127,7 @@ SUPERSET_WEBSERVER_TIMEOUT = 60
 
 SUPERSET_DASHBOARD_POSITION_DATA_LIMIT = 65535
 
+#### SSO Custom changes ####
 SSO_HOST = '34.212.135.8'
 SSO_PORT = 1978
 SSO_NAME = 'ssosession'
@@ -225,6 +226,7 @@ DRUID_IS_ACTIVE = False
 # connector.
 DRUID_METADATA_LINKS_ENABLED = True
 
+
 # ----------------------------------------------------
 # AUTHENTICATION CONFIG
 # ----------------------------------------------------
@@ -234,6 +236,7 @@ DRUID_METADATA_LINKS_ENABLED = True
 # AUTH_LDAP : Is for LDAP
 # AUTH_REMOTE_USER : Is for using REMOTE_USER from web server
 #AUTH_TYPE = AUTH_DB
+#### SSO Custom changes ####
 AUTH_TYPE = AUTH_LDAP 
 
 # Uncomment to setup Full admin role name

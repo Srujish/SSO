@@ -51,10 +51,7 @@ class SSOSessionClient:
             return str(e)
 
 
-#config = app.config
-#sso_app_host = config["SSO_HOST"]
-#sso_app_port = config["SSO_PORT"] 
-#sso_app_name = config["SSO_NAME"]
+
 
 class CustomAuthDBView(AuthDBView):
     login_template = 'appbuilder/general/security/login_db.html'
@@ -76,8 +73,7 @@ class CustomAuthDBView(AuthDBView):
         name = request.cookies.get('sso')       
  
         if name is not None:
-            # a = name.split(':')
-            # user,pwd = a[0],a[1] 
+
 
             client = SSOSessionClient(sso_app_host, sso_app_port , sso_app_name )
             sso_id = client.get_sso_session(name)
@@ -85,20 +81,17 @@ class CustomAuthDBView(AuthDBView):
 
             user = self.appbuilder.sm.find_user(username=username)
 
-            #user = self.appbuilder.sm.auth_user_db( user, pwd )
-        #     response = make_response(redirect("/superset/welcome"))
-        #     #s = response.headers
-            #username = user.username
+
 
             if user is not None:
                 
-        #         if response is not None:  
+
                                 
                 login_user(user, remember=False)
-        #             #return response 
+
                 arg = request.args
                 dashboard_id = request.args.get('next')
-                #s = dashboard_id.split('/')[-2]
+
                
 
                 if dashboard_id is not None: 
@@ -106,7 +99,7 @@ class CustomAuthDBView(AuthDBView):
                     s=parse_object.path
                     s=s.split('/')[-2] 
                     return redirect("/superset/dashboard/{}".format(s))
-                    #return redirect("dashboard_id")
+
 
                 return redirect("/superset/welcome")
 
@@ -135,12 +128,11 @@ class CustomAuthDBView(AuthDBView):
             client = SSOSessionClient(sso_app_host, sso_app_port, sso_app_name )
             postResponse = client.create_sso_session(sso_api_name , user.username )
             cook = postResponse['id']
-            #cook = user.username +':'+ form.password.data
-            #cook = user.username
+
 
 
             if response is not None:
-                #response.set_cookie('sso', value=cook )
+
                 response.set_cookie('sso', value=cook , domain = sso_domain )
                 return response 
 
@@ -160,19 +152,19 @@ class CustomAuthDBView(AuthDBView):
         sso_app_name = self.appbuilder.app.config["SSO_NAME"]
         sso_domain = self.appbuilder.app.config["SSO_DOMAIN_NAME"]
 
-        #s = request.cookies
+
         name = request.cookies.get('sso')
         if name is not None:
 
             client = SSOSessionClient(sso_app_host, sso_app_port, sso_app_name )
             client.delete_sso_session(name)
-            # sso_id = client.get_sso_session(name)
+
             res = app.make_response(redirect(self.appbuilder.get_url_for_index))
     #
 
             
             res.set_cookie('sso', expires=0,path='/',domain=sso_domain)
-            #res.set_cookie('sso', expires=0,path='/')
+
             logout_user()
             return res
         logout_user()

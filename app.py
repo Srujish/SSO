@@ -17,7 +17,7 @@
 
 import logging
 import os
-#import ldap
+
 import requests
 
 import wtforms_json
@@ -57,14 +57,18 @@ from superset.security import SupersetSecurityManager
 from flask.sessions import SecureCookieSessionInterface
 from superset.utils.core import pessimistic_connection_handling
 from superset.utils.log import DBEventLogger, get_event_logger_from_cfg_value
+
+#### SSO Custom_Importy ####
 from superset.custom_security_manager import CustomSecurityManager,SSOSessionClient
-#from superset.CustomSessionInterface import CustomSessionInterface
-#from superset import security_manager
+
 logger = logging.getLogger(__name__)
 
 
 def create_app():
     app = Flask(__name__)
+    if __name__ == "__main__":
+        app.run(ssl_context='adhoc')
+
 
     try:
         # Allow user to override our config completely
@@ -87,50 +91,6 @@ class SupersetIndexView(IndexView):
 
     @expose("/", methods=['GET'])
     def index(self):
-
-        # sso_app_host = self.appbuilder.app.config["SSO_HOST"]
-        # sso_app_port = self.appbuilder.app.config["SSO_PORT"] 
-        # sso_app_name = self.appbuilder.app.config["SSO_NAME"]
-        # client = SSOSessionClient(sso_app_host, sso_app_port , sso_app_name )
-
-        
-        # name = request.cookies.get('sso')       
- 
-        # if name is not None:
-        #     # a = name.split(':')
-        #     # user,pwd = a[0],a[1] 
-
-        #     client = SSOSessionClient(sso_app_host, sso_app_port , sso_app_name )
-        #     sso_id = client.get_sso_session(name)
-        #     username = sso_id['username']
-
-        #     user = self.appbuilder.sm.find_user(username=username)
-
-        #     #user = self.appbuilder.sm.auth_user_db( user, pwd )
-        # #     response = make_response(redirect("/superset/welcome"))
-        # #     #s = response.headers
-        #     #username = user.username
-        #     if user is not None:
-                
-        # #         if response is not None:  
-                                
-        #         login_user(user, remember=False)
-        # #             #return response 
-        #         dashboard_id = request.args.get('next')
-        #         s = dashboard_id.split('/')[-2]
-        #         if dashboard_id is not None:  
-        #             return redirect("/superset/dashboard/{}".format(s))
-        #             #return redirect("/dashboard/<dashboard_id>/")
-
-        #         return redirect("/superset/welcome")
-
-        # if 'username' in session:
-        #     u = username
-        #return 'Logged in as %s' % escape(session['username'])
-        # if not session.get("_id") is None:
-        #     u = session.get("_id")
-        #     a=u
-        #     session.pop('_id', None)
 
         return redirect("/superset/welcome")
         
